@@ -129,8 +129,8 @@ public class BoardDBBean {
             conn = getConnection();
             
             pstmt = conn.prepareStatement(
-            	"select * from board where  ROWNUM >= ? AND ROWNUM <= ? order by ref desc, re_step asc");
-            pstmt.setInt(1, start-1);
+            	"select * from board order by ref desc, re_step asc offset ? rows fetch next ? rows only");
+            pstmt.setInt(1, start-1);//start-1
 			pstmt.setInt(2, end);
             rs = pstmt.executeQuery();
 
@@ -315,9 +315,9 @@ public class BoardDBBean {
             	      "delete from board where num=?");
                     pstmt.setInt(1, num);
                     pstmt.executeUpdate();
-					x= 1; //�ۻ��� ����
+					x= 1; //비밀번호가 일치하여 삭제될 때
 				}else
-					x= 0; //��й�ȣ Ʋ��
+					x= 0; //비밀번호가 다를때
 			}
         } catch(Exception ex) {
             ex.printStackTrace();
